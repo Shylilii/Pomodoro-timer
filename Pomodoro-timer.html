@@ -1,319 +1,356 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=240, initial-scale=1.0">
 <title>Pomodoro · Focus Garden</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg: #122019;
-    --bg-radial: #16261D;
-    --card: #1C3024;
-    --card-border: #2C4632;
-    --tomato: #E5533D;
-    --amber: #E8A23D;
-    --cream: #F3EDE0;
-    --sage: #93A88F;
-    --leaf: #5B8A5F;
-    --vine: #3A5A40;
-    --shadow: rgba(0,0,0,0.45);
-  }
-
-  *{ box-sizing:border-box; }
-
-  body{
-    margin:0;
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background: radial-gradient(circle at 30% 15%, var(--bg-radial), var(--bg) 70%);
-    font-family:'Space Grotesk', sans-serif;
-    color: var(--cream);
-    padding: 24px;
-  }
-
-  .card{
-    width:min(94vw, 460px);
-    background:var(--card);
-    border:1px solid var(--card-border);
-    border-radius:28px;
-    padding: clamp(20px,4vw,36px);
-    box-shadow: 0 24px 60px var(--shadow);
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap: 22px;
-  }
-
-  .vine-wrap{ width:100%; }
-  .vine-wrap svg{ width:100%; height:auto; display:block; }
-  #vinePath{ fill:none; stroke:var(--vine); stroke-width:3; stroke-linecap:round; }
-  .leaf{ fill:var(--leaf); }
-  #sprout{ fill:var(--leaf); stroke:var(--cream); stroke-width:1.5; transition: transform .9s linear; }
-  .tomato-bloom{ transform-origin:center; animation: bloom .4s ease-out; }
-  @keyframes bloom{ from{ transform:scale(0); opacity:0; } 60%{ transform:scale(1.25); opacity:1; } to{ transform:scale(1); } }
-
-  .modes{
-    display:flex;
-    background: rgba(0,0,0,0.22);
-    border-radius:999px;
-    padding:4px;
-    gap:4px;
-    width:100%;
-  }
-  .mode-btn{
-    flex:1;
-    border:none;
-    background:transparent;
-    color: var(--sage);
-    font-family:inherit;
-    font-weight:600;
-    font-size:13px;
-    letter-spacing:0.01em;
-    padding:10px 6px;
-    border-radius:999px;
-    cursor:pointer;
-    transition: background .25s ease, color .25s ease;
-  }
-  .mode-btn.active{ background: var(--accent, var(--tomato)); color:#fff; }
-  .mode-btn:focus-visible{ outline:2px solid var(--amber); outline-offset:2px; }
-
-  .timer-display{ display:flex; flex-direction:column; align-items:center; gap:6px; }
-  .time{
-    font-family:'Space Mono', monospace;
-    font-weight:700;
-    font-size: clamp(56px, 16vw, 88px);
-    font-variant-numeric: tabular-nums;
-    line-height:1;
-    letter-spacing:-0.02em;
-  }
-  .status{ color: var(--sage); font-size:14px; text-align:center; min-height:18px; }
-
-  .controls{ display:flex; gap:12px; width:100%; }
-  button.action{
-    flex:1;
-    border:none;
-    border-radius:16px;
-    padding:14px 18px;
-    font-family:inherit;
-    font-weight:600;
-    font-size:15px;
-    cursor:pointer;
-    transition: transform .15s ease, filter .15s ease;
-  }
-  button.action:active{ transform: scale(0.97); }
-  #toggleBtn{ background: var(--tomato); color:#fff; }
-  #toggleBtn.running{ background: var(--card-border); color: var(--cream); }
-  #resetBtn{ background: transparent; color: var(--sage); border:1px solid var(--card-border); }
-  button.action:hover{ filter:brightness(1.08); }
-  button.action:focus-visible{ outline:2px solid var(--amber); outline-offset:2px; }
-
-  .footer{ font-size:12.5px; color: var(--sage); text-align:center; }
-  .footer b{ color:var(--cream); }
-
-  @media (prefers-reduced-motion: reduce){
-    #sprout{ transition:none !important; }
-    .tomato-bloom{ animation:none !important; }
-  }
+:root{
+--bg: #122019;
+--bg-radial: #16261D;
+--card: #1C3024;
+--card-border: #2C4632;
+--tomato: #E5533D;
+--amber: #E8A23D;
+--cream: #F3EDE0;
+--sage: #93A88F;
+--leaf: #5B8A5F;
+--vine: #3A5A40;
+--shadow: rgba(0,0,0,0.45);
+}
+*{ box-sizing:border-box; margin:0; padding:0; }
+body{
+width: 240px;
+height: 282px;
+overflow: hidden;
+background: radial-gradient(circle at 30% 15%, var(--bg-radial), var(--bg) 70%);
+font-family: system-ui, -apple-system, sans-serif;
+color: var(--cream);
+padding: 12px;
+}
+.card{
+width: 100%;
+height: 100%;
+background:var(--card);
+border:1px solid var(--card-border);
+border-radius:16px;
+padding: 14px;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content: space-between;
+gap: 8px;
+}
+.vine-wrap{ width:100%; max-height: 32px; }
+.vine-wrap svg{ width:100%; height:auto; display:block; }
+#vinePath{ fill:none; stroke:var(--vine); stroke-width:3; stroke-linecap:round; }
+.leaf{ fill:var(--leaf); }
+#sprout{ fill:var(--leaf); stroke:var(--cream); stroke-width:1.5; transition: transform .9s linear; }
+.tomato-bloom{ transform-origin:center; animation: bloom .4s ease-out; }
+@keyframes bloom{ from{ transform:scale(0); opacity:0; } 60%{ transform:scale(1.25); opacity:1; } to{ transform:scale(1); } }
+.modes{
+display:flex;
+background: rgba(0,0,0,0.22);
+border-radius:999px;
+padding:3px;
+gap:3px;
+width:100%;
+}
+.mode-btn{
+flex:1;
+border:none;
+background:transparent;
+color: var(--sage);
+font-family:inherit;
+font-weight:600;
+font-size:11px;
+letter-spacing:0.01em;
+padding:6px 4px;
+border-radius:999px;
+cursor:pointer;
+transition: background .25s ease, color .25s ease;
+}
+.mode-btn.active{ background: var(--accent, var(--tomato)); color:#fff; }
+.mode-btn:focus-visible{ outline:2px solid var(--amber); outline-offset:2px; }
+.timer-display{
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:4px;
+flex: 1;
+justify-content: center;
+}
+.time{
+font-family: 'Courier New', monospace;
+font-weight:700;
+font-size: 48px;
+font-variant-numeric: tabular-nums;
+line-height:1;
+letter-spacing:-0.02em;
+}
+.status{
+color: var(--sage);
+font-size:11px;
+text-align:center;
+min-height:14px;
+}
+.controls{
+display:flex;
+gap:8px;
+width:100%;
+}
+button.action{
+flex:1;
+border:none;
+border-radius:12px;
+padding:10px 12px;
+font-family:inherit;
+font-weight:600;
+font-size:13px;
+cursor:pointer;
+transition: transform .15s ease, opacity .15s ease;
+}
+button.action:active{ transform: scale(0.95); opacity: 0.8; }
+#toggleBtn{ background: var(--tomato); color:#fff; }
+#toggleBtn.running{ background: var(--card-border); color: var(--cream); }
+#resetBtn{ background: transparent; color: var(--sage); border:1px solid var(--card-border); }
+button.action:focus-visible{ outline:2px solid var(--amber); outline-offset:2px; }
+.footer{
+font-size:10px;
+color: var(--sage);
+text-align:center;
+}
+.footer b{ color:var(--cream); }
+@media (prefers-reduced-motion: reduce){
+#sprout{ transition:none !important; }
+.tomato-bloom{ animation:none !important; }
+}
 </style>
 </head>
 <body>
-
-  <main class="card">
-
-    <div class="vine-wrap">
-      <svg id="vineSvg" viewBox="0 0 460 70" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path id="vinePath" d="M10,45 C90,5 150,65 230,38 C310,10 370,62 450,30"/>
-        <path class="leaf" opacity="0.55" d="M70,28 q14,-14 26,2 q-16,6 -26,-2 Z"/>
-        <path class="leaf" opacity="0.5" d="M260,55 q16,-10 26,4 q-16,8 -26,-4 Z"/>
-        <path class="leaf" opacity="0.5" d="M390,20 q14,-12 24,2 q-15,7 -24,-2 Z"/>
-        <circle id="sprout" r="7"/>
-      </svg>
-    </div>
-
-    <div class="modes" id="modes">
-      <button class="mode-btn active" data-mode="focus" style="--accent:var(--tomato)">Focus</button>
-      <button class="mode-btn" data-mode="short" style="--accent:var(--amber)">Pausa breve</button>
-      <button class="mode-btn" data-mode="long" style="--accent:var(--amber)">Pausa lunga</button>
-    </div>
-
-    <div class="timer-display" aria-live="polite">
-      <div class="time" id="time">25:00</div>
-      <div class="status" id="status">Pronto a piantare un pomodoro?</div>
-    </div>
-
-    <div class="controls">
-      <button class="action" id="toggleBtn">Avvia</button>
-      <button class="action" id="resetBtn">Reimposta</button>
-    </div>
-
-    <div class="footer"><b id="pomodoroCount">0</b> pomodori raccolti — barra spaziatrice per avviare/mettere in pausa</div>
-
-  </main>
-
+<div class="card">
+<div class="vine-wrap">
+<svg id="vineSvg" viewBox="0 0 240 32" xmlns="http://www.w3.org/2000/svg">
+<path id="vinePath" d="M8,28 Q60,8 120,28 T232,28"/>
+<g id="sprout">
+<ellipse class="leaf" cx="0" cy="-5" rx="5" ry="7" transform="rotate(-30)"/>
+<ellipse class="leaf" cx="0" cy="-5" rx="5" ry="7" transform="rotate(30)"/>
+</g>
+</svg>
+</div>
+<div class="modes">
+<button class="mode-btn active" data-mode="focus">Focus</button>
+<button class="mode-btn" data-mode="short">Short Break</button>
+<button class="mode-btn" data-mode="long">Long Break</button>
+</div>
+<div class="timer-display">
+<div class="time" id="time">25:00</div>
+<div class="status" id="status">Ready to plant a tomato?</div>
+</div>
+<div class="controls">
+<button class="action" id="toggleBtn">Start</button>
+<button class="action" id="resetBtn">Reset</button>
+</div>
+<div class="footer">
+<b id="pomodoroCount">0</b> tomatoes collected — side button or scroll to control
+</div>
+</div>
 <script>
-(() => {
-  const durations = { focus: 25*60, short: 5*60, long: 15*60 };
-  const labels = {
-    focus: { idle:'Pronto a piantare un pomodoro?', running:'Concentrazione in corso…', paused:'In pausa — riprendi quando vuoi' },
-    short: { idle:'Pausa breve: stacca la spina', running:'Pausa breve in corso…', paused:'In pausa — riprendi quando vuoi' },
-    long:  { idle:'Pausa lunga: te la sei guadagnata', running:'Riposo lungo in corso…', paused:'In pausa — riprendi quando vuoi' }
-  };
+(async () => {
+const durations = { focus: 25*60, short: 5*60, long: 15*60 };
+const labels = {
+focus: { idle:'Ready to plant a tomato?', running:'Focusing…', paused:'Paused — resume anytime' },
+short: { idle:'Short break: take a breather', running:'Break in progress…', paused:'Paused — resume anytime' },
+long: { idle:'Long break: well deserved!', running:'Long rest in progress…', paused:'Paused — resume anytime' }
+};
 
-  let mode = 'focus';
-  let remaining = durations.focus;
-  let timerId = null;
-  let running = false;
-  let pomodoroCount = 0;
-  let cycleIndex = 0; // 0-3: posizione nel ciclo di 4 pomodori sulla vite
+let mode = 'focus';
+let remaining = durations.focus;
+let timerId = null;
+let running = false;
+let pomodoroCount = 0;
+let cycleIndex = 0;
 
-  const timeEl = document.getElementById('time');
-  const statusEl = document.getElementById('status');
-  const toggleBtn = document.getElementById('toggleBtn');
-  const resetBtn = document.getElementById('resetBtn');
-  const countEl = document.getElementById('pomodoroCount');
-  const modeBtns = [...document.querySelectorAll('.mode-btn')];
-  const sprout = document.getElementById('sprout');
-  const vinePath = document.getElementById('vinePath');
-  const vineSvg = document.getElementById('vineSvg');
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const pathLen = vinePath.getTotalLength();
+const timeEl = document.getElementById('time');
+const statusEl = document.getElementById('status');
+const toggleBtn = document.getElementById('toggleBtn');
+const resetBtn = document.getElementById('resetBtn');
+const countEl = document.getElementById('pomodoroCount');
+const modeBtns = [...document.querySelectorAll('.mode-btn')];
+const sprout = document.getElementById('sprout');
+const vinePath = document.getElementById('vinePath');
+const vineSvg = document.getElementById('vineSvg');
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const pathLen = vinePath.getTotalLength();
 
-  function pointAt(fraction){
-    const f = Math.min(Math.max(fraction, 0), 1);
-    return vinePath.getPointAtLength(f * pathLen);
-  }
+async function loadState(){
+if(window.creationStorage){
+try{
+const stored = await window.creationStorage.plain.getItem('pomodoros');
+if(stored) pomodoroCount = JSON.parse(atob(stored));
+}catch(e){}
+}
+updateDisplay();
+}
 
-  function placeSprout(fraction){
-    const p = pointAt(fraction);
-    sprout.setAttribute('transform', `translate(${p.x},${p.y})`);
-  }
+async function saveState(){
+if(window.creationStorage){
+try{
+await window.creationStorage.plain.setItem('pomodoros', btoa(JSON.stringify(pomodoroCount)));
+}catch(e){}
+}
+}
 
-  function formatTime(s){
-    const m = Math.floor(s/60).toString().padStart(2,'0');
-    const sec = (s%60).toString().padStart(2,'0');
-    return `${m}:${sec}`;
-  }
+function pointAt(fraction){
+const f = Math.min(Math.max(fraction, 0), 1);
+return vinePath.getPointAtLength(f * pathLen);
+}
 
-  function updateDisplay(){
-    timeEl.textContent = formatTime(Math.max(remaining,0));
-    const state = running ? 'running' : (remaining === durations[mode] ? 'idle' : 'paused');
-    statusEl.textContent = labels[mode][state];
-    document.title = running ? `${formatTime(remaining)} · ${mode==='focus' ? 'Focus' : 'Pausa'}` : 'Pomodoro · Focus Garden';
-    toggleBtn.textContent = running ? 'Pausa' : (remaining === durations[mode] ? 'Avvia' : 'Riprendi');
-    toggleBtn.classList.toggle('running', running);
-  }
+function placeSprout(fraction){
+const p = pointAt(fraction);
+sprout.setAttribute('transform', `translate(${p.x},${p.y})`);
+}
 
-  function setMode(newMode){
-    mode = newMode;
-    remaining = durations[mode];
-    running = false;
-    clearInterval(timerId);
-    modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
-    if(mode === 'focus'){ placeSprout(cycleIndex/4); }
-    updateDisplay();
-  }
+function formatTime(s){
+const m = Math.floor(s/60).toString().padStart(2,'0');
+const sec = (s%60).toString().padStart(2,'0');
+return `${m}:${sec}`;
+}
 
-  function bloom(){
-    const p = pointAt((cycleIndex+1)/4);
-    const ns = 'http://www.w3.org/2000/svg';
-    const g = document.createElementNS(ns,'g');
-    g.classList.add('tomato-bloom');
-    g.setAttribute('transform', `translate(${p.x},${p.y})`);
-    if(reducedMotion){ g.style.animation = 'none'; }
-    const t = document.createElementNS(ns,'text');
-    t.setAttribute('text-anchor','middle');
-    t.setAttribute('dy','6');
-    t.setAttribute('font-size','20');
-    t.textContent = '🍅';
-    g.appendChild(t);
-    vineSvg.appendChild(g);
-  }
+function updateDisplay(){
+timeEl.textContent = formatTime(Math.max(remaining,0));
+const state = running ? 'running' : (remaining === durations[mode] ? 'idle' : 'paused');
+statusEl.textContent = labels[mode][state];
+document.title = running ? `${formatTime(remaining)} · ${mode==='focus' ? 'Focus' : 'Break'}` : 'Pomodoro · Focus Garden';
+toggleBtn.textContent = running ? 'Pause' : (remaining === durations[mode] ? 'Start' : 'Resume');
+toggleBtn.classList.toggle('running', running);
+countEl.textContent = pomodoroCount;
+}
 
-  function clearVine(){
-    document.querySelectorAll('.tomato-bloom').forEach(el => el.remove());
-  }
+function setMode(newMode){
+mode = newMode;
+remaining = durations[mode];
+running = false;
+clearInterval(timerId);
+modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+if(mode === 'focus') placeSprout(cycleIndex/4);
+updateDisplay();
+}
 
-  function playChime(){
-    try{
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      [659.25, 880].forEach((freq, i) => {
-        const o = ctx.createOscillator();
-        const g = ctx.createGain();
-        o.type = 'sine';
-        o.frequency.value = freq;
-        o.connect(g); g.connect(ctx.destination);
-        const start = ctx.currentTime + i*0.18;
-        g.gain.setValueAtTime(0.0001, start);
-        g.gain.exponentialRampToValueAtTime(0.25, start+0.02);
-        g.gain.exponentialRampToValueAtTime(0.0001, start+0.4);
-        o.start(start); o.stop(start+0.45);
-      });
-    }catch(e){ /* audio non disponibile, nessun problema */ }
-  }
+function bloom(){
+const p = pointAt((cycleIndex+1)/4);
+const ns = 'http://www.w3.org/2000/svg';
+const g = document.createElementNS(ns,'g');
+g.classList.add('tomato-bloom');
+g.setAttribute('transform', `translate(${p.x},${p.y})`);
+if(reducedMotion) g.style.animation = 'none';
+const t = document.createElementNS(ns,'text');
+t.setAttribute('text-anchor','middle');
+t.setAttribute('dy','6');
+t.setAttribute('font-size','18');
+t.textContent = '🍅';
+g.appendChild(t);
+vineSvg.appendChild(g);
+}
 
-  function finishSession(){
-    clearInterval(timerId);
-    running = false;
-    playChime();
-    if(mode === 'focus'){
-      bloom();
-      pomodoroCount++;
-      cycleIndex = (cycleIndex+1) % 4;
-      countEl.textContent = pomodoroCount;
-      setMode(cycleIndex === 0 ? 'long' : 'short');
-    } else {
-      if(mode === 'long'){ clearVine(); }
-      setMode('focus');
-    }
-  }
+function clearVine(){
+document.querySelectorAll('.tomato-bloom').forEach(el => el.remove());
+}
 
-  function tick(){
-    remaining--;
-    if(mode === 'focus'){
-      const frac = (cycleIndex + (1 - Math.max(remaining,0)/durations.focus)) / 4;
-      placeSprout(frac);
-    }
-    updateDisplay();
-    if(remaining <= 0){ finishSession(); }
-  }
+function playChime(){
+try{
+const ctx = new (window.AudioContext || window.webkitAudioContext)();
+[659.25, 880].forEach((freq, i) => {
+const o = ctx.createOscillator();
+const g = ctx.createGain();
+o.type = 'sine';
+o.frequency.value = freq;
+o.connect(g);
+g.connect(ctx.destination);
+const start = ctx.currentTime + i*0.18;
+g.gain.setValueAtTime(0.0001, start);
+g.gain.exponentialRampToValueAtTime(0.25, start+0.02);
+g.gain.exponentialRampToValueAtTime(0.0001, start+0.4);
+o.start(start);
+o.stop(start+0.45);
+});
+}catch(e){}
+}
 
-  function startPause(){
-    if(running){
-      running = false;
-      clearInterval(timerId);
-    } else {
-      running = true;
-      timerId = setInterval(tick, 1000);
-    }
-    updateDisplay();
-  }
+function finishSession(){
+clearInterval(timerId);
+running = false;
+playChime();
+if(mode === 'focus'){
+bloom();
+pomodoroCount++;
+cycleIndex = (cycleIndex+1) % 4;
+saveState();
+setMode(cycleIndex === 0 ? 'long' : 'short');
+} else {
+if(mode === 'long') clearVine();
+setMode('focus');
+}
+}
 
-  function reset(){
-    running = false;
-    clearInterval(timerId);
-    remaining = durations[mode];
-    if(mode === 'focus'){ placeSprout(cycleIndex/4); }
-    updateDisplay();
-  }
+function tick(){
+remaining--;
+if(mode === 'focus'){
+const frac = (cycleIndex + (1 - Math.max(remaining,0)/durations.focus)) / 4;
+placeSprout(frac);
+}
+updateDisplay();
+if(remaining <= 0) finishSession();
+}
 
-  modeBtns.forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
-  toggleBtn.addEventListener('click', startPause);
-  resetBtn.addEventListener('click', reset);
-  document.addEventListener('keydown', e => {
-    if(e.code === 'Space' && e.target === document.body){
-      e.preventDefault();
-      startPause();
-    }
-  });
+function startPause(){
+if(running){
+running = false;
+clearInterval(timerId);
+} else {
+running = true;
+timerId = setInterval(tick, 1000);
+}
+updateDisplay();
+}
 
-  setMode('focus');
+function reset(){
+running = false;
+clearInterval(timerId);
+remaining = durations[mode];
+if(mode === 'focus') placeSprout(cycleIndex/4);
+updateDisplay();
+}
+
+modeBtns.forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
+toggleBtn.addEventListener('click', startPause);
+resetBtn.addEventListener('click', reset);
+
+document.addEventListener('keydown', e => {
+if(e.code === 'Space' && e.target === document.body){
+e.preventDefault();
+startPause();
+}
+});
+
+window.addEventListener('scrollUp', () => {
+const modes = ['focus', 'short', 'long'];
+const current = modes.indexOf(mode);
+setMode(modes[(current + 1) % modes.length]);
+});
+
+window.addEventListener('scrollDown', () => {
+const modes = ['focus', 'short', 'long'];
+const current = modes.indexOf(mode);
+setMode(modes[(current + 2) % modes.length]);
+});
+
+window.addEventListener('sideClick', () => startPause());
+window.addEventListener('longPressStart', () => reset());
+
+loadState();
+setMode('focus');
 })();
 </script>
-
 </body>
 </html>
